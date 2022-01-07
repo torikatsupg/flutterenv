@@ -21,15 +21,22 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def dartEnvironmentVariables = [:];
-if (project.hasProperty('dart-defines')) {
-    dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
+// dart-definesのパース
+def dartEnvironmentVariables = project
+            .property('dart-defines')
             .split(',')
-            .collectEntries { entry ->
-                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+            .collectEntries {
+                def pair = new String(it.decodeBase64(), 'UTF-8').split('=')
                 [(pair.first()): pair.last()]
             }
+
+// flavorをもとにアイコンをコピーするタスク
+task copySources(type: Copy) {
+    from "src/${dartEnvironmentVariables.FLAVOR}/res"
+    into 'src/main/res'
 }
+// アイコンコピーのタスクを自動実行するよう設定
+tasks.whenTaskAdded { it.dependsOn copySources }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
