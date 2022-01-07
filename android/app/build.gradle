@@ -30,13 +30,23 @@ def dartEnvironmentVariables = project
                 [(pair.first()): pair.last()]
             }
 
-// flavorをもとにアイコンをコピーするタスク
-task copySources(type: Copy) {
+task copyIcons(type: Copy) {
     from "src/${dartEnvironmentVariables.FLAVOR}/res"
     into 'src/main/res'
 }
-// アイコンコピーのタスクを自動実行するよう設定
-tasks.whenTaskAdded { it.dependsOn copySources }
+
+task copyFirebaseSource(type: Copy) {
+    from "src/firebase/${dartEnvironmentVariables.FLAVOR}-google-services.json"
+    into './'
+    rename { String fileName ->
+        fileName = "google-services.json"
+    }
+}
+
+tasks.whenTaskAdded {
+    it.dependsOn copyFirebaseSource
+    it.dependsOn copyIcons
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'

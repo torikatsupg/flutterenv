@@ -48,3 +48,5 @@ app.*.map.json
 # custom
 DartDefine.xcconfig
 **/android/app/src/main/res/mipmap*
+**/ios/GoogleService-Info.plist
+**/android/app/google-services.json
