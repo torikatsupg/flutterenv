@@ -47,4 +47,4 @@ app.*.map.json
 
 # custom
 DartDefine.xcconfig
-**/android/app/src/main/res/mipmap*/
+**/android/app/src/main/res/mipmap*
